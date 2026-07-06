@@ -111,14 +111,24 @@ function applyTheme() {
 }
 if(themeToggleBtn) themeToggleBtn.addEventListener("click", () => { isDarkMode = !isDarkMode; applyTheme(); });
 
+// app.js 내부 함수 수정
 function getCurrentFilteredItems() {
   const q = characterSearch ? characterSearch.value.toLowerCase().trim() : "";
-  const c = categoryFilter ? categoryFilter.value : "all";
+  let c = categoryFilter ? categoryFilter.value : "all";
   const onlyLiked = likeFilter ? likeFilter.checked : false;
+
   return starterItems.filter(i => {
-    const m1 = i.name.toLowerCase().includes(q) || i.title.toLowerCase().includes(q) || i.tags.some(t => t.includes(q));
+    // 1. 검색어 필터 (이름, 타이틀, 태그 포함)
+    const m1 = i.name.toLowerCase().includes(q) || 
+               i.title.toLowerCase().includes(q) || 
+               i.tags.some(t => t.includes(q));
+    
+    // 2. 카테고리 드롭다운 필터 (변환된 매핑 값 적용)
     const m2 = (c === "all" || i.category === c);
+    
+    // 3. 좋아요 찜 필터
     const m3 = !onlyLiked || likedItems.includes(i.id);
+    
     return m1 && m2 && m3;
   });
 }
@@ -188,26 +198,44 @@ window.selectCharacter = function(id) {
   if(target) target.scrollIntoView({ behavior: "smooth" });
 };
 
+// app.js 내부 함수 수정
+// app.js 내부 renderVN() 함수의 상단 분기 로직 수정
 function renderVN() {
   if (!selectedCharacterId) return;
   const character = starterItems.find(item => item.id === selectedCharacterId);
   const curScore = affectionScores[character.id] || 0;
   const isMax = curScore >= 100;
 
-  if (isMax && currentSceneKey === "start") {
+  // 1. 만약 사용자가 선택지를 골라 '이미 4장 엔딩 결과 씬'에 도달해 있다면 그 씬을 그대로 유지합니다.
+  if (currentSceneKey === "stage4_pass" || currentSceneKey === "stage4_fail") {
+    // 이미 최종 대사 상태이므로 강제 전환하지 않고 그대로 둡니다.
+  } 
+  // 2. 호감도가 100%이지만 아직 4장 결과를 안 본 상태('start', 'stage2', 'stage3' 등)일 때 시크릿 씬으로 세팅합니다.
+  else if (isMax && (currentSceneKey === "start" || !character.script[currentSceneKey]?.choices?.length)) {
     currentSceneKey = "secret_max_love";
     character.script["secret_max_love"] = {
-      speaker: character.name, expression: "💖 비밀 편지 전달",
+      speaker: character.name, 
+      expression: "💖 비밀 편지 전달",
       text: secretDialogues[character.id] || "내 마음을 모두 네가 채워버렸어! 갤러리에서 내 비밀 편지를 확인해줘!",
-      choices: []
+      choices: [] // 최종 시크릿 대사이므로 하단 선택지를 비워둠
     };
   }
 
+  // currentSceneKey에 따른 씬 오브젝트 참조
   let scene = character.script[currentSceneKey];
+  
+  // 3. 만약 분기점(isCheck) 조건 판정 씬이라면 점수를 체크하여 패스/페일로 갱신
   if (scene && scene.isCheck) {
     currentSceneKey = curScore >= scene.threshold ? scene.passNext : scene.failNext;
-    scene = character.script[currentSceneKey];
+    scene = character.script[currentSceneKey]; 
   }
+
+  // 예외 방지용 기본 롤백
+  if (!scene) {
+    scene = character.script["start"];
+  }
+
+  // --- 이하 vnFeatureSlot.innerHTML 렌더링 및 UI 코드 동일 ---
 
   const enchantClass = isMax ? 'enchanted' : '';
   const colorStyle = isMax ? `color: ${character.themeColor};` : '';
