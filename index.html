@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Service Update Starter</title>
+  <link rel="stylesheet" href="./css/style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" aria-label="Bunsik Love Home">
+        <span class="brand-mark" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 21C12 21 4 13.5 4 8.5C4 5.5 6.5 3 9.5 3C11.24 3 12.8 3.82 13.5 5.12C14.2 3.82 15.76 3 17.5 3C20.5 3 23 5.5 23 8.5C23 13.5 15 21 12 21Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <span>Bunsik Love</span>
+      </a>
+
+      <nav class="nav" aria-label="주요 메뉴">
+        <a href="#feature-a">Love Story</a>
+        <a href="#items">Bunsik Profile</a>
+        <a href="#feature-b">System Info</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow">Bunsik Romance Simulation</p>
+          <h1>분식들의 매콤달콤한 하트 시그널!</h1>
+          <p class="hero-text">
+            하단의 카드 목록에서 공략하고 싶은 분식 캐릭터(떡볶이, 순대, 튀김, 오뎅)를 클릭해보세요. 상단의 <strong>Love Story</strong> 슬롯에서 가슴 설레는 1:1 대화 분기 시나리오가 시작됩니다!
+          </p>
+          <div class="hero-actions">
+            <a class="button primary" href="#feature-a">시나리오 슬롯 보기</a>
+            <a class="button ghost" href="#items">분식 캐릭터 선택</a>
+          </div>
+        </div>
+
+        <div class="hero-panel" aria-label="연애 시뮬레이션 상태 요약">
+          <div class="metric-card">
+            <span class="metric-label">Characters</span>
+            <strong id="itemCount">4</strong>
+          </div>
+          <div class="metric-card">
+            <span class="metric-label">Story Node</span>
+            <strong>Active</strong>
+          </div>
+          <div class="metric-card wide">
+            <span class="metric-label">System Status</span>
+            <strong>호감도 수치 저장 중 (Local)</strong>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="feature-a" class="section">
+      <div class="container">
+        <div class="section-title">
+          <p class="eyebrow">Interactive VN Screen</p>
+          <h2>Love Story 시나리오 플레이어</h2>
+        </div>
+
+        <div class="feature-slot large" data-slot="primary-feature" id="vnFeatureSlot" style="border-style: solid; border-width: 1.5px;">
+          <div class="vn-empty-state">
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="color: var(--primary);">
+              <path d="M12 21C12 21 4 13.5 4 8.5C4 5.5 6.5 3 9.5 3C11.24 3 12.8 3.82 13.5 5.12C14.2 3.82 15.76 3 17.5 3C20.5 3 23 5.5 23 8.5C23 13.5 15 21 12 21Z" stroke="currentColor" stroke-width="1.8" fill="rgba(37, 99, 235, 0.1)"/>
+            </svg>
+            <h3>아직 대화 상대가 선택되지 않았습니다.</h3>
+            <p>아래 <strong>Bunsik Profile (카드 목록)</strong>에서 함께 대화하고 싶은 분식 캐릭터를 선택해보세요!</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="items" class="section muted">
+      <div class="container">
+        <div class="section-title row-title">
+          <div>
+            <p class="eyebrow">Bunsik Directory</p>
+            <h2>분식 캐릭터 프로필</h2>
+          </div>
+          <div class="toolbar-slot" data-slot="toolbar-feature" style="border: none; padding: 0; background: transparent; width: 100%; max-width: 480px;">
+            <div style="display: flex; gap: 8px; width: 100%;">
+              <input type="text" id="characterSearch" placeholder="캐릭터 이름 또는 태그 검색..." style="flex-grow: 1; padding: 10px 14px; border: 1.5px solid var(--line); border-radius: 12px; font-family: inherit; font-size: 14px; font-weight: 600; outline: none; background: var(--surface); color: var(--text); transition: border-color 0.2s;" />
+              <select id="categoryFilter" style="padding: 10px 14px; border: 1.5px solid var(--line); border-radius: 12px; font-family: inherit; font-size: 14px; font-weight: 600; background: var(--surface); color: var(--text); outline: none; cursor: pointer; transition: border-color 0.2s;">
+                <option value="all">전체</option>
+                <option value="tteokbokki">떡볶이</option>
+                <option value="sundae">순대</option>
+                <option value="twigim">튀김</option>
+                <option value="odeng">오뎅</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div id="cardGrid" class="card-grid" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section id="feature-b" class="section">
+      <div class="container two-column">
+        <!-- Guestbook Form Slot -->
+        <div class="feature-slot" data-slot="secondary-feature" style="border-style: solid; border-width: 1.5px; align-content: start; text-align: left; justify-items: start; padding: 24px;">
+          <h3 style="margin-bottom: 8px; font-size: 20px; display: flex; align-items: center; gap: 8px;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="color: var(--primary);">
+              <path d="M11 4H4C2.89543 4 2 4.89543 2 6V20C2 21.1046 2.89543 22 4 22H18C19.1046 22 20 21.1046 20 20V13M18.5 2.5C19.3284 1.67157 20.6716 1.67157 21.5 2.5C22.3284 3.32843 22.3284 4.67157 21.5 5.5L12 15L8 16L9 12L18.5 2.5Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            방명록 남기기
+          </h3>
+          <p style="margin: 0 0 16px; font-size: 13px; color: var(--muted);">분식 캐릭터들을 향한 응원의 한마디나 게임 소감을 남겨주세요!</p>
+          
+          <form id="guestbookForm" style="width: 100%; display: flex; flex-direction: column; gap: 10px;" novalidate>
+            <div>
+              <label for="visitorName" style="display: block; font-size: 12px; font-weight: 800; margin-bottom: 4px; color: var(--muted);">작성자 닉네임</label>
+              <input type="text" id="visitorName" placeholder="2~8자 사이로 입력하세요" style="width: 100%; padding: 10px 12px; border: 1.5px solid var(--line); border-radius: 10px; font-family: inherit; font-size: 13px; font-weight: 600; outline: none; background: var(--surface); color: var(--text);" />
+            </div>
+            <div>
+              <label for="visitorFav" style="display: block; font-size: 12px; font-weight: 800; margin-bottom: 4px; color: var(--muted);">최애 분식 선택</label>
+              <select id="visitorFav" style="width: 100%; padding: 10px 12px; border: 1.5px solid var(--line); border-radius: 10px; font-family: inherit; font-size: 13px; font-weight: 600; outline: none; background: var(--surface); color: var(--text); cursor: pointer;">
+                <option value="none">선택 안 함</option>
+                <option value="떡볶이">떡볶이</option>
+                <option value="순대">순대</option>
+                <option value="튀김">튀김</option>
+                <option value="오뎅">오뎅</option>
+              </select>
+            </div>
+            <div>
+              <label for="visitorMessage" style="display: block; font-size: 12px; font-weight: 800; margin-bottom: 4px; color: var(--muted);">남길 메시지</label>
+              <textarea id="visitorMessage" rows="2" placeholder="5자 이상의 응원 한마디를 적어주세요!" style="width: 100%; padding: 10px 12px; border: 1.5px solid var(--line); border-radius: 10px; font-family: inherit; font-size: 13px; font-weight: 600; outline: none; background: var(--surface); color: var(--text); resize: none;"></textarea>
+            </div>
+            <div id="formError" style="font-size: 12px; font-weight: 700; color: #ef4444; min-height: 18px;"></div>
+            <button type="submit" class="button primary" style="min-height: 40px; border: none; border-radius: 10px; cursor: pointer; font-size: 14px;">방명록 등록하기</button>
+          </form>
+        </div>
+
+        <!-- Guestbook Messages List Slot -->
+        <div class="feature-slot" data-slot="status-feature" style="border-style: solid; border-width: 1.5px; align-content: start; text-align: left; justify-items: start; padding: 24px;">
+          <h3 style="margin-bottom: 8px; font-size: 20px; display: flex; align-items: center; gap: 8px; width: 100%; justify-content: space-between;">
+            <span style="display: flex; align-items: center; gap: 8px;">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="color: var(--primary);">
+                <path d="M8 12H8.01M12 12H12.01M16 12H16.01M21 12C21 16.4183 17.4183 20 13 20C11.5177 20 10.13 19.5978 8.94138 18.899L4 20L5.22686 15.8458C4.45391 14.73 4 13.4141 4 12C4 7.58172 7.58172 4 12 4C16.4183 4 21 7.58172 21 12Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              방명록 목록
+            </span>
+            <button id="clearGuestbook" style="background: transparent; border: none; color: var(--muted); font-size: 11px; cursor: pointer; text-decoration: underline; font-weight: 700;">비우기</button>
+          </h3>
+          <p style="margin: 0 0 16px; font-size: 13px; color: var(--muted);">방문자들의 따끈따끈한 메시지 한마디!</p>
+          
+          <div id="guestbookList" style="width: 100%; display: flex; flex-direction: column; gap: 10px; max-height: 240px; overflow-y: auto; padding-right: 4px;">
+            <!-- Dynamic items loaded here -->
+            <div style="text-align: center; color: var(--muted); padding: 40px 0; width: 100%; font-size: 13px; font-weight: 600;">
+              아직 작성된 방명록이 없습니다. 첫 마디를 남겨주세요!
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span>Service Update Starter</span>
+      <span>Build features. Test. Launch.</span>
+    </div>
+  </footer>
+
+  <script src="./js/data.js"></script>
+  <script src="./js/app.js"></script>
+</body>
+</html>
